@@ -1,6 +1,7 @@
 package ru.mike.logger.loader;
 
 import org.yaml.snakeyaml.Yaml;
+import ru.mike.logger.resource.LoggerProperties;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,6 +20,10 @@ public class ResourceLoader {
 
     public Properties parseKl4jProperties(Path pathToProperties) {
         return removeLoggerPrefix(parseProperties(pathToProperties));
+    }
+
+    public Properties parseKl4jProperties() {
+        return removeLoggerPrefix(parseProperties());
     }
 
     public Properties parseKl4jYaml(Path pathToYaml) {
@@ -57,5 +62,17 @@ public class ResourceLoader {
         } catch (IOException e) {
             throw new RuntimeException("Unable to load properties");
         }
+    }
+
+    private Properties parseProperties() {
+        Properties properties = new Properties();
+
+        try {
+            LoggerProperties.getProperties().forEach(lp -> properties.put(lp.getName(), lp.getValue()));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return properties;
     }
 }

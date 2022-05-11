@@ -9,7 +9,6 @@ import ru.mike.reflection.KReflections;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
@@ -25,7 +24,6 @@ public class LoggerConfig {
     }
 
     private Properties properties;
-    private final Path systemPropertiesPath = Paths.get("src/main/java/ru/mike/logger/resource/kl4j.properties");
     private final URL userPropertiesUrl = ClassLoader.getSystemClassLoader().getResource("testDeleteAfter/kl4j.properties");
     private final URL userYmlUrl = ClassLoader.getSystemClassLoader().getResource("kl4j.yml");
     private ResourceLoader resourceLoader = new ResourceLoader();
@@ -39,7 +37,7 @@ public class LoggerConfig {
         settingsClasses = reflections.getSubTypesOf(Setting.class);
         propertyInstances = createPropertyInstances(settingsClasses);
 
-        properties = resourceLoader.parseKl4jProperties(systemPropertiesPath);
+        properties = resourceLoader.parseKl4jProperties();
         setupLoggerConfig();
 
         if (userPropertiesUrl != null && userYmlUrl != null) {
